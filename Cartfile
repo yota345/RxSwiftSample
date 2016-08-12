@@ -1,3 +1,8 @@
+# HTTP通信ライブラリ
 github "Alamofire/Alamofire"
-github "ReactiveX/RxSwift" 
+
+# RxSwift
+github "ReactiveX/RxSwift"
+
+# JSON parser
 github "ikesyo/Himotoki"
