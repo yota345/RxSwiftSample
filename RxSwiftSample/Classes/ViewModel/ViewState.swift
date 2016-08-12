@@ -19,4 +19,17 @@ enum ViewState {
     case Blank
     case Requesting
     case Error(ErrorType)
+    
+    
+    /**
+     APIを叩いても良い状態かを判定
+     */
+    func fetchEnabledViewState() -> Bool {
+        switch self {
+        case .Blank, .Working:
+            return true
+        default:
+            return false
+        }
+    }
 }

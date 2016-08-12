@@ -33,8 +33,8 @@ struct EventsViewModel {
 
         scrollEndComing
             .asObservable()
-            .subscribeNext { scrollEndComing in
-                if self.fetchEnabledViewState(self.viewState.value) && scrollEndComing {
+            .subscribeNext {
+                if self.viewState.value.fetchEnabledViewState() && $0 {
                     self.eventModel.fetchEventList( self.nextEventsCount() )
                 }
             }
@@ -45,7 +45,7 @@ struct EventsViewModel {
          APIの結果をsubscribeしている
         */
         eventModel
-            .responseState
+            .requestState
             .asObservable()
             .subscribeOn(scheduler.serialBackground)
             .observeOn(scheduler.main)
@@ -82,19 +82,6 @@ struct EventsViewModel {
     */
     func nextEventsCount() -> Int {
         return self.events.value.count + 1
-    }
-
-
-    /**
-     APIを叩いても良い状態かを判定
-    */
-    func fetchEnabledViewState(viewState: ViewState) -> Bool {
-        switch viewState {
-        case .Blank, .Working:
-            return true
-        default:
-            return false
-        }
     }
 
 }

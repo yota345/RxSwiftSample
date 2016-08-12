@@ -12,11 +12,11 @@ import Himotoki
 
 /**
  Eventモデル
- - responseState: API通信の状態を扱う
+ - requestState: API通信の状態を扱う
  - disposeBag: RxSwiftで不要なstreamを削除するためのクラス
  */
 struct EventsModel {
-    internal let responseState = Variable(RequestState.Stopped)
+    internal let requestState = Variable(RequestState.Stopped)
     private let disposeBag = DisposeBag()
 }
 
@@ -28,7 +28,7 @@ extension EventsModel {
      - APIレスポンスは、self.responseに格納
     */
     func fetchEventList(count: Int) {
-        responseState.value = .Requesting
+        requestState.value = .Requesting
 
         EventsRequest
             .GetEvents(count)
@@ -36,9 +36,9 @@ extension EventsModel {
             .subscribe(
                 onNext: {
                     let events = try! decodeValue($0) as EventListResponse
-                    self.responseState.value = .Response(events)
+                    self.requestState.value = .Response(events)
                 }, onError: {
-                    self.responseState.value = .Error($0)
+                    self.requestState.value = .Error($0)
                 }
             )
             .addDisposableTo(disposeBag)
