@@ -1,0 +1,3 @@
+github "Alamofire/Alamofire"
+github "ReactiveX/RxSwift" 
+github "ikesyo/Himotoki"
