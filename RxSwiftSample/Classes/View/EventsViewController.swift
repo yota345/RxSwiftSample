@@ -25,6 +25,7 @@ class EventsViewController: UIViewController {
 
         /**
          スクロールが終わりかけているかを判定している
+         FIXME: ロジックをViewModelに移す
         */
         tableView
             .rx_contentOffset
