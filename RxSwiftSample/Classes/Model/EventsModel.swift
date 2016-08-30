@@ -25,7 +25,7 @@ extension EventsModel {
 
     /**
      - Eventの一覧を取得する
-     - APIレスポンスは、self.responseに格納
+     - APIレスポンスは、self.requestStateに格納
     */
     func fetchEventList(count: Int) {
         requestState.value = .Requesting

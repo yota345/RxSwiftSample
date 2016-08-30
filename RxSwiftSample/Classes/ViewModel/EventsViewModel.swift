@@ -34,7 +34,7 @@ struct EventsViewModel {
         scrollEndComing
             .asObservable()
             .subscribeNext {
-                if self.viewState.value.fetchEnabledViewState() && $0 {
+                if self.viewState.value.fetchEnabled() && $0 {
                     self.eventModel.fetchEventList( self.nextEventsCount() )
                 }
             }

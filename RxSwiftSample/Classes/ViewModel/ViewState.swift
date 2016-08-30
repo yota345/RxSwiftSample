@@ -24,7 +24,7 @@ enum ViewState {
     /**
      APIを叩いても良い状態かを判定
      */
-    func fetchEnabledViewState() -> Bool {
+    func fetchEnabled() -> Bool {
         switch self {
         case .Blank, .Working:
             return true
