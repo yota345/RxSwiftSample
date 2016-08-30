@@ -27,7 +27,7 @@ struct EventListResponse: Decodable {
 
 
     struct Events: Decodable {
-        let event: Event
+        internal let event: Event
 
         static func decode(e: Extractor) throws -> Events {
             return try Events (
