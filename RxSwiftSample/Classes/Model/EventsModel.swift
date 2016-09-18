@@ -18,6 +18,7 @@ import Himotoki
 struct EventsModel {
     internal let requestState = Variable(RequestState.Stopped)
     private let disposeBag = DisposeBag()
+    private let scheduler = RxScheduler.sharedInstance
 }
 
 
@@ -33,10 +34,12 @@ extension EventsModel {
         EventsRequest
             .GetEvents(count)
             .request()
+            .timeout(5, scheduler: scheduler.serialBackground)
+            .retry(1)
+            .map{ try! decodeValue($0) as EventListResponse }
             .subscribe(
                 onNext: {
-                    let events = try! decodeValue($0) as EventListResponse
-                    self.requestState.value = .Response(events)
+                    self.requestState.value = .Response($0)
                 }, onError: {
                     self.requestState.value = .Error($0)
                 }

@@ -47,7 +47,6 @@ struct EventsViewModel {
         eventModel
             .requestState
             .asObservable()
-            .subscribeOn(scheduler.serialBackground)
             .observeOn(scheduler.main)
             .subscribeNext {
                 self.subscribeState($0)
