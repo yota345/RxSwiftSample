@@ -17,7 +17,7 @@ struct EventListResponse: Decodable {
     internal let results_start: String
     internal let events: [Events]
 
-    static func decode(e: Extractor) throws -> EventListResponse {
+    static func decode(_ e: Extractor) throws -> EventListResponse {
         return try EventListResponse(
             results_returned:   e <| "results_returned",
             results_start:      e <| "results_start",
@@ -29,7 +29,7 @@ struct EventListResponse: Decodable {
     struct Events: Decodable {
         internal let event: Event
 
-        static func decode(e: Extractor) throws -> Events {
+        static func decode(_ e: Extractor) throws -> Events {
             return try Events (
                 event: e <| "event"
             )
@@ -45,7 +45,7 @@ struct EventListResponse: Decodable {
             internal let address: String
             internal let place: String
 
-            static func decode(e: Extractor) throws -> Event {
+            static func decode(_ e: Extractor) throws -> Event {
                 return try Event (
                     event_id:    e <| "event_id",
                     title:       e <| "title",

@@ -15,10 +15,10 @@
  - .Error(ErrorType): エラーが起きている状態
 */
 enum ViewState {
-    case Working
-    case Blank
-    case Requesting
-    case Error(ErrorType)
+    case working
+    case blank
+    case requesting
+    case error(Error)
     
     
     /**
@@ -26,7 +26,7 @@ enum ViewState {
      */
     func fetchEnabled() -> Bool {
         switch self {
-        case .Blank, .Working:
+        case .blank, .working:
             return true
         default:
             return false

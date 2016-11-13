@@ -22,7 +22,7 @@ protocol APIRequest {
     var parameters: [String: AnyObject] { get }
     var baseURL: String { get }
     var path: String { get }
-    var method: Alamofire.Method { get }
+    var method: Alamofire.HTTPMethod { get }
 }
 
 
@@ -30,8 +30,7 @@ extension APIRequest {
 
     /// API通信の対象URL
     var url: String { return baseURL + path }
-
-
+    
     /**
      API通信を実行する
      - returns: Observable:AnyObject
@@ -39,19 +38,19 @@ extension APIRequest {
     */
     func request() -> Observable<AnyObject> {
         return Observable.create { observer in
-            let request = Alamofire.request(self.method, self.url, parameters: self.parameters, encoding: .URL)
+            let request = Alamofire.request(self.url, method: self.method, parameters: self.parameters)
                 .responseJSON { response in
                     switch response.result {
-                    case .Success:
-                        observer.onNext(response.result.value!)
+                    case .success:
+                        observer.onNext(response.result.value! as AnyObject)
                         observer.onCompleted()
-                    case .Failure(let error):
+                    case .failure(let error):
                         observer.onError(error)
                     }
             }
             request.resume()
-
-            return AnonymousDisposable {
+            
+            return Disposables.create {
                 request.cancel()
             }
         }
