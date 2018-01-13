@@ -13,7 +13,7 @@ import Alamofire
  EventのAPI通信情報を設定
 */
 enum EventsRequest {
-    case GetEvents(Int)
+    case getEvents(Int)
 }
 
 
@@ -22,17 +22,17 @@ extension EventsRequest: APIRequest {
     var baseURL: String { return GlobalConstant.atndBase }
 
 
-    var method: Alamofire.Method {
+    var method: Alamofire.HTTPMethod {
         switch self {
-        case .GetEvents:
-            return .GET
+        case .getEvents:
+            return .get
         }
     }
 
 
     var path: String {
         switch self {
-        case .GetEvents:
+        case .getEvents:
             return GlobalConstant.atndEvents
         }
     }
@@ -40,11 +40,11 @@ extension EventsRequest: APIRequest {
 
     var parameters: [String: AnyObject] {
         switch self {
-        case .GetEvents(let count):
+        case .getEvents(let count):
             return [
-                "format": "json",
-                "start": count,
-                "count": 15
+                "format": "json" as AnyObject,
+                "start": count as AnyObject,
+                "count": 15 as AnyObject
             ]
         }
     }

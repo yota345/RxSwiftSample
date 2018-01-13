@@ -24,11 +24,11 @@ struct RxScheduler {
 
     init() {
         main = MainScheduler.instance
-        serialBackground = SerialDispatchQueueScheduler(globalConcurrentQueueQOS: .Default)
+        serialBackground = SerialDispatchQueueScheduler.init(qos: .default)
 
-        let operationQueue = NSOperationQueue()
+        let operationQueue = OperationQueue()
         operationQueue.maxConcurrentOperationCount = 5
-        operationQueue.qualityOfService = NSQualityOfService.UserInitiated
+        operationQueue.qualityOfService = QualityOfService.userInitiated
         concurrentBackground = OperationQueueScheduler(operationQueue: operationQueue)
     }
 }

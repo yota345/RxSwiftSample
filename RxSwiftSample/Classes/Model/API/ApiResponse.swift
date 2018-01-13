@@ -18,8 +18,8 @@ import Himotoki
  - .Response(Decodable?): API通信でencode済みレスポンスを受け取っている
 */
 enum RequestState {
-    case Stopped
-    case Requesting
-    case Error(ErrorType)
-    case Response(Decodable?)
+    case stopped
+    case requesting
+    case error(Error)
+    case response(Decodable?)
 }

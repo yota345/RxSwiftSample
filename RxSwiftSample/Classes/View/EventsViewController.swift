@@ -15,8 +15,8 @@ import RxCocoa
  Event一覧を表示するViewController
  */
 class EventsViewController: UIViewController {
-    private let viewModel = EventsViewModel()
-    private let disposeBag = DisposeBag()
+    fileprivate let viewModel = EventsViewModel()
+    fileprivate let disposeBag = DisposeBag()
     @IBOutlet weak var tableView: UITableView!
 
 
@@ -28,7 +28,7 @@ class EventsViewController: UIViewController {
          FIXME: ロジックをViewModelに移す
         */
         tableView
-            .rx_contentOffset
+            .rx.contentOffset
             .asObservable()
             .map { [unowned self] in
                 $0.y + 300 >= self.tableView.contentSize.height - self.tableView.bounds.size.height
@@ -42,7 +42,8 @@ class EventsViewController: UIViewController {
         */
         viewModel.events
             .asDriver()
-            .drive(tableView.rx_itemsWithCellIdentifier("EventCell", cellType: UITableViewCell.self)) { (row, element, cell) in
+            .drive(tableView.rx.items(cellIdentifier: "EventCell", cellType: UITableViewCell.self))
+            { (row, element, cell) in
                 cell.textLabel?.text = element.event.title
             }
             .addDisposableTo(disposeBag)
@@ -55,7 +56,7 @@ class EventsViewController: UIViewController {
         viewModel
             .events
             .asDriver()
-            .driveNext({ [weak self] _ in
+            .drive(onNext: {  [weak self] _ in
                 self?.tableView.reloadData()
             })
             .addDisposableTo(disposeBag)

@@ -16,9 +16,9 @@ import Himotoki
  - disposeBag: RxSwiftで不要なstreamを削除するためのクラス
  */
 struct EventsModel {
-    internal let requestState = Variable(RequestState.Stopped)
-    private let disposeBag = DisposeBag()
-    private let scheduler = RxScheduler.sharedInstance
+    internal let requestState = Variable(RequestState.stopped)
+    fileprivate let disposeBag = DisposeBag()
+    fileprivate let scheduler = RxScheduler.sharedInstance
 }
 
 
@@ -28,20 +28,20 @@ extension EventsModel {
      - Eventの一覧を取得する
      - APIレスポンスは、self.requestStateに格納
     */
-    func fetchEventList(count: Int) {
-        requestState.value = .Requesting
+    func fetchEventList(_ count: Int) {
+        requestState.value = .requesting
 
         EventsRequest
-            .GetEvents(count)
+            .getEvents(count)
             .request()
             .timeout(5, scheduler: scheduler.serialBackground)
             .retry(1)
             .map{ try! decodeValue($0) as EventListResponse }
             .subscribe(
                 onNext: {
-                    self.requestState.value = .Response($0)
+                    self.requestState.value = .response($0)
                 }, onError: {
-                    self.requestState.value = .Error($0)
+                    self.requestState.value = .error($0)
                 }
             )
             .addDisposableTo(disposeBag)

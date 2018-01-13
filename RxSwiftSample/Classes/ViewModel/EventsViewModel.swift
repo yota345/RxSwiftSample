@@ -19,13 +19,13 @@ import UIKit
  - viewState: Viewの状態を表現
  - scrollEndComing: tableViewのスクロールが終わりかけているかを判定した結果
 */
-struct EventsViewModel {
+class EventsViewModel {
 
-    private let eventModel = EventsModel()
-    private let scheduler = RxScheduler.sharedInstance
-    private let disposeBag = DisposeBag()
+    fileprivate let eventModel = EventsModel()
+    fileprivate let scheduler = RxScheduler.sharedInstance
+    fileprivate let disposeBag = DisposeBag()
     internal let events: Variable<[EventListResponse.Events]> = Variable([])
-    internal let viewState = Variable(ViewState.Blank)
+    internal let viewState = Variable(ViewState.blank)
     internal let scrollEndComing = Variable(false)
 
 
@@ -33,11 +33,11 @@ struct EventsViewModel {
 
         scrollEndComing
             .asObservable()
-            .subscribeNext {
-                if self.viewState.value.fetchEnabled() && $0 {
+            .subscribe(onNext: { bool in
+                if self.viewState.value.fetchEnabled() && bool {
                     self.eventModel.fetchEventList( self.nextEventsCount() )
                 }
-            }
+            })
             .addDisposableTo(disposeBag)
 
 
@@ -48,28 +48,27 @@ struct EventsViewModel {
             .requestState
             .asObservable()
             .observeOn(scheduler.main)
-            .subscribeNext {
-                self.subscribeState($0)
-            }
+            .subscribe(onNext: { requestState in
+                self.subscribeState(requestState)
+            })
             .addDisposableTo(disposeBag)
-
     }
 
 
     /**
      APIの通信状況とViewの状態を接続している
     */
-    func subscribeState(state: RequestState) {
+    func subscribeState(_ state: RequestState) {
         switch state {
-        case .Stopped:
-            self.viewState.value = .Blank
-        case .Requesting:
-            self.viewState.value = .Requesting
-        case .Error(let error):
-            self.viewState.value = .Error(error)
-        case .Response(let response):
+        case .stopped:
+            self.viewState.value = .blank
+        case .requesting:
+            self.viewState.value = .requesting
+        case .error(let error):
+            self.viewState.value = .error(error)
+        case .response(let response):
             let events = (response as? EventListResponse)?.events ?? []
-            self.viewState.value = .Working
+            self.viewState.value = .working
             self.scrollEndComing.value = false
             self.events.value += events
         }
