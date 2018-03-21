@@ -8,6 +8,7 @@
 
 import RxSwift
 import Himotoki
+import protocol Himotoki.Decodable
 
 
 /**

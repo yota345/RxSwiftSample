@@ -7,6 +7,7 @@
 //
 
 import Himotoki
+import protocol Himotoki.Decodable
 
 
 /**
